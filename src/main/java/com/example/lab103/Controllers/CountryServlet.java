@@ -37,14 +37,22 @@ public class CountryServlet extends HttpServlet {
 
             switch (action) {
                 case "formCrear":
+                    request.setAttribute("listaRegiones", countryDao.listarRegiones());
                     view = request.getRequestDispatcher("country/newCountry.jsp");
                     view.forward(request, response);
                     break;
                 case "crear":
                     countryId = request.getParameter("id");
-                    String countryName = request.getParameter("countryName");
-                    System.out.println(countryName);
-                    BigDecimal regionId = new BigDecimal(request.getParameter("regionId"));
+
+                    String countryName = null;
+                    if (!request.getParameter("countryName").equals("")) {
+                        countryName = request.getParameter("countryName");
+                    }
+                    //System.out.println(countryName);
+                    BigDecimal regionId = null;
+                    if (!request.getParameter("regionId").equals("")) {
+                        regionId = new BigDecimal(request.getParameter("regionId"));
+                    }
 
                     country = countryDao.obtener(countryId);
 
@@ -70,6 +78,7 @@ public class CountryServlet extends HttpServlet {
                     if (country == null) {
                         response.sendRedirect(request.getContextPath() + "/CountryServlet");
                     } else {
+                        request.setAttribute("listaRegiones", countryDao.listarRegiones());
                         request.setAttribute("country", country);
                         view = request.getRequestDispatcher("country/updateCountry.jsp");
                         view.forward(request, response);

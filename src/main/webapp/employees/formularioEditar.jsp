@@ -2,12 +2,14 @@
 <%@ page import="com.example.lab103.Beans.Employee" %>
 <%@ page import="com.example.lab103.Beans.Department" %>
 <%@ page import="com.example.lab103.Beans.Job" %>
+<%@ page import="com.example.lab103.Beans.JobHistory" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <jsp:useBean id="empleado" type="com.example.lab103.Beans.Employee" scope="request"/>
 <jsp:useBean scope="request" id="listaTrabajos" type="java.util.ArrayList<com.example.lab103.Beans.Job>"/>
 <jsp:useBean id="listaDepartamentos" type="java.util.ArrayList<com.example.lab103.Beans.Department>"
              scope="request"/>
 <jsp:useBean id="listaJefes" type="java.util.ArrayList<com.example.lab103.Beans.Employee>" scope="request"/>
+<jsp:useBean id="listaHistorial" type="java.util.ArrayList<com.example.lab103.Beans.JobHistory>" scope="request"/>
 <!DOCTYPE html>
 <html>
     <head>
@@ -92,6 +94,50 @@
                                 </option>
                                 <% }%>
                             </select>
+                        </div>
+                        <div class="mb-3">
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Historial de trabajo del empleado</th>
+                                    </tr>
+                                </thead>
+                                <%int i = 0;
+                                    for (JobHistory j : listaHistorial) {
+                                        if (j.getEmployee().getEmployeeId() == empleado.getEmployeeId()) {
+                                            if (i == 0) {%>
+                                <thead>
+                                    <tr>
+                                        <th>Fecha inicio</th>
+                                        <th>Fecha fin</th>
+                                        <th>Trabajo</th>
+                                        <th>Departamento</th>
+                                    </tr>
+                                </thead>
+                                <%}%>
+                                <tbody>
+                                    <tr>
+                                        <td><%= j.getStartDate()%>
+                                        </td>
+                                        <td><%= j.getEndDate()%>
+                                        </td>
+                                        <td><%= j.getJob().getJobTitle()%>
+                                        </td>
+                                        <td><%= j.getDepartment().getDepartmentName()%>
+                                        </td>
+                                    </tr>
+                                    <%i++;
+                                        }
+                                    }
+                                    if (i == 0) { %>
+                                <tbody>
+                                <tr>
+                                    <td>No presenta cambios laborales</td>
+                                </tr>
+                                </tbody>
+                                    <%}%>
+                            </table>
                         </div>
                         <a href="<%= request.getContextPath()%>/EmployeeServlet" class="btn btn-danger">Cancelar</a>
                         <input type="submit" value="Guardar" class="btn btn-primary"/>

@@ -18,23 +18,23 @@
                     <form method="POST" action="<%=request.getContextPath()%>/LocationServlet?action=crear">
                         <div class="mb-3">
                             <label class="form-label" for="id">Location ID</label>
-                            <input type="text" class="form-control" name="id" id="id" required="required"/>
+                            <input type="text" class="form-control" name="id" id="id"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="streetAddress">Street Address</label>
-                            <input type="text" class="form-control" name="streetAddress" id="streetAddress" required="required"/>
+                            <input type="text" class="form-control" name="streetAddress" id="streetAddress"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="postalCode">Postal Code</label>
-                            <input type="text" class="form-control" name="postalCode" id="postalCode" required="required"/>
+                            <input type="text" class="form-control" name="postalCode" id="postalCode"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="city">City</label>
-                            <input type="text" class="form-control" name="city" id="city" required="required"/>
+                            <input type="text" class="form-control" name="city" id="city"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="stateProvince">State Province</label>
-                            <input type="text" class="form-control" name="stateProvince" id="stateProvince" required="required"/>
+                            <input type="text" class="form-control" name="stateProvince" id="stateProvince"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="countryId">Country</label>

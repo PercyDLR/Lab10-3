@@ -1,6 +1,7 @@
 package com.example.lab103.Daos;
 
 import com.example.lab103.Beans.Country;
+import com.example.lab103.Beans.Region;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -37,8 +38,19 @@ public class CountryDao extends DaoBase {
                         + "VALUES (?,?,?)";
                 try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                     pstmt.setString(1, countryId);
-                    pstmt.setString(2, countryName);
-                    pstmt.setBigDecimal(3, regionId);
+
+                    if (regionId == null) {
+                        pstmt.setNull(3, Types.BIGINT);
+                    } else {
+                        pstmt.setBigDecimal(3, regionId);
+                    }
+
+                    if (countryId == null) {
+                        pstmt.setNull(2, Types.VARCHAR);
+                    } else {
+                        pstmt.setString(2, countryName);
+                    }
+
                     pstmt.executeUpdate();
                 }
             }
@@ -79,9 +91,19 @@ public class CountryDao extends DaoBase {
                 String sql = "UPDATE countries SET country_name = ?, region_id = ? "
                         + "WHERE country_id = ?";
                 try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                    pstmt.setString(1, countryName);
-                    pstmt.setBigDecimal(2, regionId);
                     pstmt.setString(3, countryId);
+
+                    if (regionId == null) {
+                        pstmt.setNull(2, Types.BIGINT);
+                    } else {
+                        pstmt.setBigDecimal(2, regionId);
+                    }
+
+                    if (countryId == null) {
+                        pstmt.setNull(1, Types.VARCHAR);
+                    } else {
+                        pstmt.setString(1, countryName);
+                    }
                     pstmt.executeUpdate();
                 }
 
@@ -103,6 +125,29 @@ public class CountryDao extends DaoBase {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public ArrayList<Region> listarRegiones() {
+
+        ArrayList<Region> listaRegiones = new ArrayList<>();
+        String sql = "SELECT * FROM hr.regions;";
+
+        try (Connection conn = this.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql);) {
+
+            while (rs.next()) {
+                Region region = new Region();
+                region.setId(rs.getInt(1));
+                region.setNombre(rs.getString(2));
+                listaRegiones.add(region);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return listaRegiones;
+
     }
 
 }

@@ -21,27 +21,27 @@
                         <input type="hidden" class="form-control" name="id" value="<%=location.getLocationId()%>">
                         <div class="mb-3">
                             <label class="form-label" for="streetAddress">Street Address</label>
-                            <input type="text" class="form-control" name="streetAddress" id="streetAddress" required="required"
+                            <input type="text" class="form-control" name="streetAddress" id="streetAddress"
                                    value="<%=location.getStreetAddress() %>"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="postalCode">Postal Code</label>
-                            <input type="text" class="form-control" name="postalCode" id="postalCode" required="required"
+                            <input type="text" class="form-control" name="postalCode" id="postalCode"
                                    value="<%=location.getPostalCode() %>"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="city">City</label>
-                            <input type="text" class="form-control" name="city" id="city" required="required"
+                            <input type="text" class="form-control" name="city" id="city"
                                    value="<%=location.getCity() %>"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="stateProvince">State Province</label>
-                            <input type="text" class="form-control" name="stateProvince" id="stateProvince" required="required"
+                            <input type="text" class="form-control" name="stateProvince" id="stateProvince"
                                    value="<%=location.getStateProvince() %>"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="countryId">Country</label>
-                            <select name="countryId" id="countryId" class="form-control" required>
+                            <select name="countryId" id="countryId" class="form-control">
                                 <% for (Country country : listaPaises) {%>
                                 <option value="<%=country.getCountryId()%>" <%=country.getCountryId().equals(location.getCountry().getCountryId()) ? "SELECTED" : ""%>>
                                     <%=country.getCountryName()%>

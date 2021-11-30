@@ -1,4 +1,6 @@
+<%@ page import="com.example.lab103.Beans.Region" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="listaRegiones" scope="request" type="java.util.ArrayList<com.example.lab103.Beans.Region>"/>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,15 +19,20 @@
                     <form method="POST" action="<%=request.getContextPath()%>/CountryServlet?action=crear">
                         <div class="mb-3">
                             <label class="form-label" for="id">Country ID</label>
-                            <input type="text" class="form-control" name="id" id="id"/>
+                            <input type="text" class="form-control" name="id" id="id" required/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="countryName">Country name</label>
                             <input type="text" class="form-control" name="countryName" id="countryName" />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="regionId">Region Id</label>
-                            <input type="text" class="form-control" name="regionId" id="regionId" />
+                            <label class="form-label" for="regionId">Region</label>
+                            <select class="form-select" name="regionId" id="regionId">
+                                <option value="" selected>-- Seleccione una region --</option>
+                                <%for (Region r : listaRegiones) { %>
+                                <option value="<%=r.getId()%>"><%=r.getNombre()%></option>
+                                <%}%>
+                            </select>
                         </div>
                         <a href="<%= request.getContextPath()%>/CountryServlet" class="btn btn-danger">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Submit</button>

@@ -41,9 +41,9 @@
                     </td>
                     <td><%=country.getCountryId()%>
                     </td>
-                    <td><%=country.getCountryName() %>
+                    <td><%=country.getCountryName() == null ? "--" : country.getCountryName()%>
                     </td>
-                    <td><%=country.getRegionId()%>
+                    <td><%=country.getRegionId() == null ? "--" : country.getRegionId()%>
                     </td>
                     <td>
                         <a href="<%=request.getContextPath()%>/CountryServlet?action=editar&id=<%=country.getCountryId()%>">

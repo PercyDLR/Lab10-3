@@ -43,6 +43,7 @@ public class EmployeeServlet extends HttpServlet {
             EmployeeDao employeeDao = new EmployeeDao();
             JobDao jobDao = new JobDao();
             DepartmentDao departmentDao = new DepartmentDao();
+            JobHistoryDao jobHistoryDao = new JobHistoryDao();
 
             switch (action) {
                 case "lista":
@@ -75,6 +76,7 @@ public class EmployeeServlet extends HttpServlet {
                             request.setAttribute("listaTrabajos", jobDao.listarTrabajos());
                             request.setAttribute("listaDepartamentos", departmentDao.listaDepartamentos());
                             request.setAttribute("listaJefes", employeeDao.listarEmpleados());
+                            request.setAttribute("listaHistorial", jobHistoryDao.listarHistorial());
                             view = request.getRequestDispatcher("employees/formularioEditar.jsp");
                             view.forward(request, response);
                         } else {
