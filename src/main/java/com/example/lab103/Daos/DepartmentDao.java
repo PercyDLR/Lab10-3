@@ -15,7 +15,7 @@ public class DepartmentDao extends DaoBase {
     public ArrayList<Department> listaDepartamentos() {
         ArrayList<Department> listaDepartamentos = new ArrayList<>();
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM departments d " +
                      "left join employees e on d.manager_id = e.employee_id " +
@@ -39,7 +39,7 @@ public class DepartmentDao extends DaoBase {
                 "left join employees e on d.manager_id = e.employee_id " +
                 "left join locations l on d.location_id = l.location_id " +
                 "WHERE d.department_id = ?";
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setInt(1, departmentId);
 
@@ -87,8 +87,8 @@ public class DepartmentDao extends DaoBase {
             String sql = "INSERT INTO departments (`department_id`, `department_name`, `manager_id`, `location_id`) "
                     + "VALUES (?,?,?,?)";
 
-        try (Connection conn = this.getConection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+            try (Connection conn = this.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql);) {
 
                 pstmt.setInt(1, departmentId);
                 pstmt.setString(2, departmentName);
@@ -114,11 +114,11 @@ public class DepartmentDao extends DaoBase {
 
         public void actualizar ( int departmentId, String departmentName, int managerId, int locationId){
 
-        String sql = "UPDATE departments SET department_name = ?, manager_id = ?, location_id = ? "
-                + "WHERE department_id = ?";
-        try (Connection conn = this.getConection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);) {
-            pstmt.setString(1, departmentName);
+            String sql = "UPDATE departments SET department_name = ?, manager_id = ?, location_id = ? "
+                    + "WHERE department_id = ?";
+            try (Connection conn = this.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql);) {
+                pstmt.setString(1, departmentName);
 
                 if (managerId == 0) {
                     pstmt.setNull(2, Types.INTEGER);
@@ -143,15 +143,15 @@ public class DepartmentDao extends DaoBase {
 
         public void borrar ( int departmentId){
 
-        String sql = "DELETE FROM departments WHERE department_id = ?";
-        try (Connection conn = this.getConection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, departmentId);
-            pstmt.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(DepartmentDao.class.getName()).log(Level.SEVERE, null, ex);
+            String sql = "DELETE FROM departments WHERE department_id = ?";
+            try (Connection conn = this.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, departmentId);
+                pstmt.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(DepartmentDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-    }
 
         public ArrayList<SalarioPorDepartamentoDto> listaSalarioPorDepartamento () {
 
@@ -162,9 +162,9 @@ public class DepartmentDao extends DaoBase {
                     + "inner join employees e on e.department_id = d.department_id "
                     + "group by d.department_name order by d.department_name";
 
-        try (Connection conn = this.getConection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql);) {
+            try (Connection conn = this.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql);) {
 
                 while (rs.next()) {
                     SalarioPorDepartamentoDto dto = new SalarioPorDepartamentoDto();
