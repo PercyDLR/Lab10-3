@@ -46,20 +46,15 @@
                             </select>
                         </div>
                         <a href="<%= request.getContextPath()%>/LocationServlet" class="btn btn-danger">Cancelar</a>
+                        <button type="submit" name="buttonPressed" class="btn btn-primary">Submit</button>
                         <%
                             if(null != request.getParameter("buttonPressed")){
-                                if(null == request.getParameter("id") &&
-                                        null == request.getParameter("streetAddress") &&
-                                        null == request.getParameter("postalCode") &&
-                                        null == request.getParameter("city") &&
-                                        null == request.getParameter("stateProvince")
-                                )
+                                if(null == request.getParameter("id"))
                                 {
                                     request.setAttribute("errorMessage", "Error al crear o editar el location");
                                 }
                             }
                         %>
-                        <button type="submit" name="buttonPressed" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>

@@ -48,6 +48,7 @@
                             </select>
                         </div>
                         <a href="<%= request.getContextPath()%>/DepartmentServlet" class="btn btn-danger">Cancelar</a>
+                        <button type="submit" name="buttonPressed" class="btn btn-primary">Submit</button>
                         <%
                         if(null != request.getParameter("buttonPressed")){
                             if(null == request.getParameter("id") &&
@@ -57,7 +58,6 @@
                             }
                         }
                         %>
-                        <button type="submit" name="buttonPressed" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                 <div class="col"></div>

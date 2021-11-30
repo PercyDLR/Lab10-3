@@ -13,8 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 @WebServlet(name = "LocationServlet", urlPatterns = {"/LocationServlet"})
 public class LocationServlet extends HttpServlet {
@@ -51,7 +54,6 @@ public class LocationServlet extends HttpServlet {
             } else {
 
                 Location location;
-                int locationId = 0;
 
                 switch (action) {
                     case "formCrear":
@@ -61,40 +63,39 @@ public class LocationServlet extends HttpServlet {
                         break;
 
                     case "crear":
-                        String locationIdS = request.getParameter("id");
-                        if(locationIdS.matches("[0-9]*")) {
-                            locationId = Integer.parseInt(locationIdS);
-                        } else{
-                            locationId = Integer.parseInt(null);
+                        int locationId = Integer.parseInt(request.getParameter("id"));
+                        try{
+                            String streetAddress = request.getParameter("streetAddress");
+                            String postalCode = request.getParameter("postalCode");
+                            if (postalCode.equals("")) {
+                                postalCode = null;
+                            }
+
+                            String city = request.getParameter("city");
+
+                            String stateProvince = request.getParameter("stateProvince");
+                            if (stateProvince.equals("")) {
+                                stateProvince = null;
+                            }
+
+                            String countryId = request.getParameter("countryId");
+
+                            location = locationDao.obtener(locationId);
+
+                            if (location == null && top < 3) {
+                                locationDao.crear(locationId, streetAddress, postalCode, city, stateProvince, countryId);
+
+                            } else if (location != null && (top == 1 || top == 3)) {
+                                locationDao.actualizar(locationId, streetAddress, postalCode, city, stateProvince, countryId);
+                            }
+
+                            response.sendRedirect(request.getContextPath() + "/LocationServlet");
+                            break;
+                        }
+                        catch(NumberFormatException e){
+
                         }
 
-                        String streetAddress = request.getParameter("streetAddress");
-
-                        String postalCode = request.getParameter("postalCode");
-                        if (postalCode.equals("")) {
-                            postalCode = null;
-                        }
-
-                        String city = request.getParameter("city");
-
-                        String stateProvince = request.getParameter("stateProvince");
-                        if (stateProvince.equals("")) {
-                            stateProvince = null;
-                        }
-
-                        String countryId = request.getParameter("countryId");
-
-                        location = locationDao.obtener(locationId);
-
-                        if (location == null && top < 3) {
-                            locationDao.crear(locationId, streetAddress, postalCode, city, stateProvince, countryId);
-
-                        } else if (location != null && (top == 1 || top == 3)) {
-                            locationDao.actualizar(locationId, streetAddress, postalCode, city, stateProvince, countryId);
-                        }
-
-                        response.sendRedirect(request.getContextPath() + "/LocationServlet");
-                        break;
 
                     case "lista":
                         ArrayList<Location> lista = locationDao.listar();
@@ -106,11 +107,7 @@ public class LocationServlet extends HttpServlet {
                         break;
 
                     case "editar":
-                        if(locationIdS.matches("[0-9]*")) {
-                            locationId = Integer.parseInt(locationIdS);
-                        } else{
-                            locationId = Integer.parseInt(null);
-                        }
+                        locationId = Integer.parseInt(request.getParameter("id"));
                         location = locationDao.obtener(locationId);
                         if (location == null) {
                             response.sendRedirect(request.getContextPath() + "/LocationServlet");

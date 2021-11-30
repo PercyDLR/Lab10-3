@@ -10,53 +10,56 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav">
+
             <% if (employeeSession.getEmployeeId() > 0) {
-                int top = (Integer) session.getAttribute("top");%>
-            <li class="nav-item">
-                <a class="nav-link <%=currentPage.equals("cou") ? "active" : ""%>"
-                   href="<%=request.getContextPath()%>/CountryServlet">
-                    Country
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <%=currentPage.equals("loc") ? "active" : ""%>"
-                   href="<%=request.getContextPath()%>/LocationServlet">
-                    Location
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <%=currentPage.equals("dep") ? "active" : ""%>"
-                   href="<%=request.getContextPath()%>/DepartmentServlet">
-                    Department
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <%=currentPage.equals("emp") ? "active" : ""%>"
-                   href="<%=request.getContextPath()%>/EmployeeServlet">
-                    Employees
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <%=currentPage.equals("job") ? "active" : ""%>"
-                   href="<%=request.getContextPath()%>/JobServlet">
-                    Jobs
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <%=currentPage.equals("est") ? "active" : ""%>"
-                   href="<%=request.getContextPath()%>/EmployeeServlet?action=est">
-                    Estadísticas
-                </a>
-            </li>
-            <li class="nav-item">
-                <span class="nav-link text-dark">
-                    Bienvenido <%=employeeSession.getFirstName()%> <%=employeeSession.getLastName()%> - Top <%=top%>
-                    (<a href="<%=request.getContextPath()%>/LoginServlet?action=logout">Cerrar Sesión</a>)
-                </span>
-            </li>
+                int top = (Integer) session.getAttribute("top");
+            %>
+
+                <li class="nav-item">
+                    <a class="nav-link <%=currentPage.equals("cou") ? "active" : ""%>"
+                       href="<%=request.getContextPath()%>/CountryServlet">
+                        Country
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%=currentPage.equals("loc") ? "active" : ""%>"
+                       href="<%=request.getContextPath()%>/LocationServlet" <%=top == 4 ? "hidden" : ""%>>
+                        Location
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%=currentPage.equals("dep") ? "active" : ""%>"
+                       href="<%=request.getContextPath()%>/DepartmentServlet">
+                        Department
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%=currentPage.equals("emp") ? "active" : ""%>"
+                       href="<%=request.getContextPath()%>/EmployeeServlet">
+                        Employees
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%=currentPage.equals("job") ? "active" : ""%>"
+                       href="<%=request.getContextPath()%>/JobServlet" <%=top == 4 ? "hidden" : ""%>>
+                        Jobs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%=currentPage.equals("est") ? "active" : ""%>"
+                       href="<%=request.getContextPath()%>/EmployeeServlet?action=est">
+                        Estadísticas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link text-dark">
+                        Bienvenido <%=employeeSession.getFirstName()%> <%=employeeSession.getLastName()%> - Top <%=top%>
+                        (<a href="<%=request.getContextPath()%>/LoginServlet?action=logout">Cerrar Sesión</a>)
+                    </span>
+                </li>
+
             <% } else { %>
-            <a class="nav-link" style="color: #007bff;" href="<%=request.getContextPath()%>/LoginServlet">(Iniciar
-                Sesión)</a>
+                <a class="nav-link" style="color: #007bff;" href="<%=request.getContextPath()%>/LoginServlet">(Iniciar Sesión)</a>
             <% } %>
         </ul>
     </div>
