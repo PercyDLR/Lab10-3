@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @WebServlet(name = "EmployeeServlet", urlPatterns = {"/EmployeeServlet"})
@@ -147,18 +148,6 @@ public class EmployeeServlet extends HttpServlet {
 
             String jobId = request.getParameter("job_id");
 
-            // Registra en el log
-            if(!jobId.equals(em.getJob().getJobId())){
-                JobHistoryDao jhd = new JobHistoryDao();
-
-                JobHistory jh = new JobHistory();
-                jh.setEmployee(em);
-
-                for(JobHistory hist : jhd.listarHistorial()){
-
-                }
-            }
-
             Job job = new Job(jobId);
             e.setJob(job);
 
@@ -175,6 +164,7 @@ public class EmployeeServlet extends HttpServlet {
             EmployeeDao employeeDao = new EmployeeDao();
 
             if (request.getParameter("employee_id") == null) {
+
                 try {
                     employeeDao.guardarEmpleado(e);
                     session.setAttribute("msg", "Empleado creado exitosamente");
@@ -184,9 +174,63 @@ public class EmployeeServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/EmployeeServlet?action=agregar");
                 }
             } else {
+
+                Employee employee = employeeDao.obtenerEmpleado(Integer.parseInt(request.getParameter("employee_id")));
                 e.setEmployeeId(Integer.parseInt(request.getParameter("employee_id")));
                 try {
                     employeeDao.actualizarEmpleado(e);
+
+                    if(!jobId.equals(employee.getJob().getJobId())){
+                        JobHistoryDao jhd = new JobHistoryDao();
+                        JobHistory jh = new JobHistory();
+                        jh.setEmployee(employee);
+                        jh.setJob(employee.getJob());
+                        jh.setDepartment(employee.getDepartment());
+
+                        boolean empleadoTieneHistorial = false;
+                        for(JobHistory hist : jhd.listarHistorial()){
+                            if (hist.getEmployee().getEmployeeId() == jh.getEmployee().getEmployeeId()) {
+                                empleadoTieneHistorial = true;
+                            }
+                        }
+
+                        if (empleadoTieneHistorial) {
+                            int i = 0;
+                            for (JobHistory hist : jhd.listarHistorial()) {
+                                if (hist.getEmployee().getEmployeeId() == jh.getEmployee().getEmployeeId()) {
+                                    System.out.println(i);
+                                    if (i == 0) {
+                                        jh.setStartDate(hist.getEndDate());
+                                        System.out.println(jh.getStartDate());
+                                    } else {
+
+                                        String[] splitJH = jh.getStartDate().split("\\s+");
+                                        String[] splitHIST = hist.getEndDate().split("\\s+");
+
+                                        String[] dmaJH = splitJH[0].split("-");
+                                        String[] hmmJH = splitJH[1].split(":");
+
+                                        String[] dmaHIST = splitHIST[0].split("-");
+                                        String[] hmmHIST = splitHIST[1].split(":");
+
+                                        LocalDateTime dateJH = LocalDateTime.of(Integer.parseInt(dmaJH[0]), Integer.parseInt(dmaJH[1]), Integer.parseInt(dmaJH[2]), Integer.parseInt(hmmJH[0]), Integer.parseInt(hmmJH[1]), Integer.parseInt(hmmJH[2]));
+                                        LocalDateTime dateHIST = LocalDateTime.of(Integer.parseInt(dmaHIST[0]), Integer.parseInt(dmaHIST[1]), Integer.parseInt(dmaHIST[2]), Integer.parseInt(hmmHIST[0]), Integer.parseInt(hmmHIST[1]), Integer.parseInt(hmmHIST[2]));
+
+                                        if (dateJH.isBefore(dateHIST)) {
+                                            jh.setStartDate(hist.getEndDate());
+                                        }
+                                    }
+                                    i++;
+                                }
+                            }
+
+                        } else {
+                            jh.setStartDate(jh.getEmployee().getHireDate());
+                        }
+                        jhd.agregarRegistro(jh);
+
+                    }
+
                     session.setAttribute("msg", "Empleado actualizado exitosamente");
                     response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
                 } catch (SQLException ex) {
