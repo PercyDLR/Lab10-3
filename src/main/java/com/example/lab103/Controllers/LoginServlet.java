@@ -60,7 +60,23 @@ public class LoginServlet extends HttpServlet {
 
                 session.setMaxInactiveInterval(10 * 60); // 10 minutos
 
-                response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
+                if (employee.getSalary().compareTo(new BigDecimal(15000)) > 0) {
+                    session.setAttribute("top", 1);
+                    response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
+
+                } else if (employee.getSalary().compareTo(new BigDecimal(8500)) > 0) {
+                    session.setAttribute("top", 2);
+                    response.sendRedirect(request.getContextPath() + "/JobServlet");
+
+                } else if (employee.getSalary().compareTo(new BigDecimal(5000)) > 0) {
+                    session.setAttribute("top", 3);
+                    response.sendRedirect(request.getContextPath() + "/DepartmentServlet");
+
+                } else {
+                    session.setAttribute("top", 4);
+                    response.sendRedirect(request.getContextPath() + "/CountryServlet");
+                }
+
             } else {
                 request.setAttribute("err", "El usuario o password no existen");
                 RequestDispatcher view = request.getRequestDispatcher("login/loginForm.jsp");

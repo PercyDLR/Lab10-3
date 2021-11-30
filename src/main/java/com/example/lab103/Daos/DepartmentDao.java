@@ -61,25 +61,26 @@ public class DepartmentDao extends DaoBase {
             department.setDepartmentId(rs.getInt(1));
             department.setDepartmentName(rs.getString(2));
 
+            Employee manager = new Employee();
             if (rs.getInt("d.manager_id") != 0) {
-                Employee manager = new Employee();
                 manager.setEmployeeId(rs.getInt("employee_id"));
                 manager.setFirstName(rs.getString("first_name"));
                 manager.setLastName(rs.getString("last_name"));
-                department.setManager(manager);
             }
+            department.setManager(manager);
 
+            Location location = new Location();
             if (rs.getInt("l.location_id") != 0) {
-                Location location = new Location();
                 location.setLocationId(rs.getInt("l.location_id"));
-                location.setCity(rs.getString("city"));
                 department.setLocation(location);
+                location.setCity(rs.getString("city"));
             }
+            department.setLocation(location);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return department;
-    }
+        }
 
         public void crear ( int departmentId, String departmentName,int managerId, int locationId){
 
@@ -111,7 +112,7 @@ public class DepartmentDao extends DaoBase {
             }
         }
 
-    public void actualizar(int departmentId, String departmentName, int managerId, int locationId) {
+        public void actualizar ( int departmentId, String departmentName, int managerId, int locationId){
 
         String sql = "UPDATE departments SET department_name = ?, manager_id = ?, location_id = ? "
                 + "WHERE department_id = ?";
