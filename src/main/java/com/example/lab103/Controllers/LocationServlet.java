@@ -36,7 +36,7 @@ public class LocationServlet extends HttpServlet {
             CountryDao countryDao = new CountryDao();
             RequestDispatcher view;
             Location location;
-            int locationId;
+            int locationId = 0;
 
             switch (action) {
                 case "formCrear":
@@ -45,11 +45,28 @@ public class LocationServlet extends HttpServlet {
                     view.forward(request, response);
                     break;
                 case "crear":
-                    locationId = Integer.parseInt(request.getParameter("id"));
+                    boolean locationId_isNumero = false;
+                    try {
+                        locationId = Integer.parseInt(request.getParameter("id"));
+                        locationId_isNumero = true;
+                    }
+                    catch(NumberFormatException e){
+                    }
+
                     String streetAddress = request.getParameter("streetAddress");
+
                     String postalCode = request.getParameter("postalCode");
+                    if(postalCode.equals("")){
+                        postalCode = null;
+                    }
+
                     String city = request.getParameter("city");
+
                     String stateProvince = request.getParameter("stateProvince");
+                    if(stateProvince.equals("")){
+                        stateProvince = null;
+                    }
+
                     String countryId = request.getParameter("countryId");
 
                     location = locationDao.obtener(locationId);
@@ -71,7 +88,13 @@ public class LocationServlet extends HttpServlet {
                     break;
 
                 case "editar":
-                    locationId = Integer.parseInt(request.getParameter("id"));
+                    locationId_isNumero = false;
+                    try {
+                        locationId = Integer.parseInt(request.getParameter("id"));
+                        locationId_isNumero = true;
+                    }
+                    catch(NumberFormatException e){
+                    }
                     location = locationDao.obtener(locationId);
                     if (location == null) {
                         response.sendRedirect(request.getContextPath() + "/LocationServlet");
