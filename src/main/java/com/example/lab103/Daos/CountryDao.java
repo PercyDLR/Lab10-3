@@ -12,7 +12,7 @@ public class CountryDao extends DaoBase {
 
         ArrayList<Country> lista = new ArrayList<>();
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM countries")) {
 
@@ -31,7 +31,7 @@ public class CountryDao extends DaoBase {
 
     public void crear(String countryId, String countryName, BigDecimal regionId) {
         try {
-            try (Connection conn = this.getConection();) {
+            try (Connection conn = this.getConnection();) {
                 System.out.println(countryName);
                 String sql = "INSERT INTO countries (`country_id`, `country_name`, `region_id`) "
                         + "VALUES (?,?,?)";
@@ -52,7 +52,7 @@ public class CountryDao extends DaoBase {
         Country country = null;
         try {
             String sql = "SELECT * FROM countries WHERE country_id = ?";
-            try (Connection conn = this.getConection();
+            try (Connection conn = this.getConnection();
                     PreparedStatement pstmt = conn.prepareStatement(sql);) {
                 pstmt.setString(1, countryId);
 
@@ -75,7 +75,7 @@ public class CountryDao extends DaoBase {
 
     public void actualizar(String countryId, String countryName, BigDecimal regionId) {
         try {
-            try (Connection conn = this.getConection();) {
+            try (Connection conn = this.getConnection();) {
                 String sql = "UPDATE countries SET country_name = ?, region_id = ? "
                         + "WHERE country_id = ?";
                 try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -93,7 +93,7 @@ public class CountryDao extends DaoBase {
 
     public void borrar(String countryId) {
         try {
-            try (Connection conn = this.getConection();) {
+            try (Connection conn = this.getConnection();) {
                 String sql = "DELETE FROM countries WHERE country_id = ?";
                 try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                     pstmt.setString(1, countryId);

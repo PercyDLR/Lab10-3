@@ -81,35 +81,35 @@ public class DepartmentDao extends DaoBase {
         return department;
     }
 
-    public void crear(int departmentId, String departmentName, int managerId, int locationId) {
+        public void crear ( int departmentId, String departmentName,int managerId, int locationId){
 
-        String sql = "INSERT INTO departments (`department_id`, `department_name`, `manager_id`, `location_id`) "
-                + "VALUES (?,?,?,?)";
+            String sql = "INSERT INTO departments (`department_id`, `department_name`, `manager_id`, `location_id`) "
+                    + "VALUES (?,?,?,?)";
 
         try (Connection conn = this.getConection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
 
-            pstmt.setInt(1, departmentId);
-            pstmt.setString(2, departmentName);
+                pstmt.setInt(1, departmentId);
+                pstmt.setString(2, departmentName);
 
-            if (managerId == 0) {
-                pstmt.setNull(3, Types.INTEGER);
-            } else {
-                pstmt.setInt(3, managerId);
+                if (managerId == 0) {
+                    pstmt.setNull(3, Types.INTEGER);
+                } else {
+                    pstmt.setInt(3, managerId);
+                }
+
+                if (locationId == 0) {
+                    pstmt.setNull(4, Types.INTEGER);
+                } else {
+                    pstmt.setInt(4, locationId);
+                }
+
+                pstmt.executeUpdate();
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-
-            if (locationId == 0) {
-                pstmt.setNull(4, Types.INTEGER);
-            } else {
-                pstmt.setInt(4, locationId);
-            }
-
-            pstmt.executeUpdate();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
-    }
 
     public void actualizar(int departmentId, String departmentName, int managerId, int locationId) {
 
@@ -119,28 +119,28 @@ public class DepartmentDao extends DaoBase {
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, departmentName);
 
-            if (managerId == 0) {
-                pstmt.setNull(2, Types.INTEGER);
-            } else {
-                pstmt.setInt(2, managerId);
+                if (managerId == 0) {
+                    pstmt.setNull(2, Types.INTEGER);
+                } else {
+                    pstmt.setInt(2, managerId);
+                }
+
+                if (locationId == 0) {
+                    pstmt.setNull(3, Types.INTEGER);
+                } else {
+                    pstmt.setInt(3, locationId);
+                }
+
+                pstmt.setInt(4, departmentId);
+
+                pstmt.executeUpdate();
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-
-            if (locationId == 0) {
-                pstmt.setNull(3, Types.INTEGER);
-            } else {
-                pstmt.setInt(3, locationId);
-            }
-
-            pstmt.setInt(4, departmentId);
-
-            pstmt.executeUpdate();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
-    }
 
-    public void borrar(int departmentId) {
+        public void borrar ( int departmentId){
 
         String sql = "DELETE FROM departments WHERE department_id = ?";
         try (Connection conn = this.getConection();
@@ -152,32 +152,32 @@ public class DepartmentDao extends DaoBase {
         }
     }
 
-    public ArrayList<SalarioPorDepartamentoDto> listaSalarioPorDepartamento() {
+        public ArrayList<SalarioPorDepartamentoDto> listaSalarioPorDepartamento () {
 
-        ArrayList<SalarioPorDepartamentoDto> lista = new ArrayList<>();
+            ArrayList<SalarioPorDepartamentoDto> lista = new ArrayList<>();
 
-        String sql = "select department_name, min(salary), max(salary), truncate(avg(salary),2) "
-                + "from departments d "
-                + "inner join employees e on e.department_id = d.department_id "
-                + "group by d.department_name order by d.department_name";
+            String sql = "select department_name, min(salary), max(salary), truncate(avg(salary),2) "
+                    + "from departments d "
+                    + "inner join employees e on e.department_id = d.department_id "
+                    + "group by d.department_name order by d.department_name";
 
         try (Connection conn = this.getConection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql);) {
 
-            while (rs.next()) {
-                SalarioPorDepartamentoDto dto = new SalarioPorDepartamentoDto();
-                dto.setNombreDepartamento(rs.getString(1));
-                dto.setSalarioMinimo(rs.getBigDecimal(2));
-                dto.setSalarioMaximo(rs.getBigDecimal(3));
-                dto.setSalarioPromedio(rs.getBigDecimal(4));
-                lista.add(dto);
+                while (rs.next()) {
+                    SalarioPorDepartamentoDto dto = new SalarioPorDepartamentoDto();
+                    dto.setNombreDepartamento(rs.getString(1));
+                    dto.setSalarioMinimo(rs.getBigDecimal(2));
+                    dto.setSalarioMaximo(rs.getBigDecimal(3));
+                    dto.setSalarioPromedio(rs.getBigDecimal(4));
+                    lista.add(dto);
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
 
-        return lista;
+            return lista;
+        }
     }
 
-}

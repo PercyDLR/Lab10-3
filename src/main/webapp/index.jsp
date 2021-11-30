@@ -10,7 +10,7 @@
 <html>
     <head>
         <title>Gestión HR</title>
-        <jsp:include page="includes/headCss.jsp"></jsp:include>
+        <jsp:include page="/includes/headCss.jsp"/>
     </head>
     <body>
         <div class='container'>
@@ -20,7 +20,7 @@
             <div class="row mt-4">
                 <div class="col"><img width="100%" src="<%=request.getContextPath()%>/resources/images/hr.jpg"></div>
             </div>
-            <jsp:include page="includes/footer.jsp"/>
+            <jsp:include page="/includes/footer.jsp"/>
         </div>
     </body>
 </html>

@@ -13,7 +13,7 @@ public class EmployeeDao extends DaoBase {
     public ArrayList<Employee> listarEmpleados() {
         ArrayList<Employee> listaEmpleados = new ArrayList<>();
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM employees e \n"
                      + "left join jobs j on (j.job_id = e.job_id) \n"
@@ -66,7 +66,7 @@ public class EmployeeDao extends DaoBase {
 
         String sql = "SELECT * FROM employees e WHERE employee_id = ?";
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
 
             pstmt.setInt(1, employeeId);
@@ -111,7 +111,7 @@ public class EmployeeDao extends DaoBase {
         String sql = "INSERT INTO employees (first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             this.setEmployeeParams(pstmt, employee);
             pstmt.executeUpdate();
@@ -123,7 +123,7 @@ public class EmployeeDao extends DaoBase {
                 + "hire_date = ?, job_id = ?, salary = ?, commission_pct = ?, "
                 + "manager_id = ?, department_id = ? WHERE employee_id = ?";
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             this.setEmployeeParams(pstmt, employee);
             pstmt.setInt(11, employee.getEmployeeId());
@@ -133,7 +133,7 @@ public class EmployeeDao extends DaoBase {
 
     public void borrarEmpleado(int employeeId) throws SQLException {
         String sql = "DELETE FROM employees WHERE employee_id = ?";
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setInt(1, employeeId);
             pstmt.executeUpdate();
@@ -146,7 +146,7 @@ public class EmployeeDao extends DaoBase {
 
         String sql = "SELECT * FROM employees_credentials WHERE email = ? AND password_hashed = SHA2(?,256)";
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
@@ -176,7 +176,8 @@ public class EmployeeDao extends DaoBase {
                 + "inner join countries c on (c.country_id = l.country_id)\n"
                 + "inner join regions r on (c.region_id = r.region_id)\n"
                 + "group by r.region_id;";
-        try (Connection conn = this.getConection();
+
+        try (Connection conn = this.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 

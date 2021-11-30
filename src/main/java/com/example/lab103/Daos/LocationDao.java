@@ -12,7 +12,7 @@ public class LocationDao extends DaoBase {
 
         ArrayList<Location> lista = new ArrayList<>();
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM locations left join countries c on locations.country_id = c.country_id")) {
 
@@ -41,7 +41,7 @@ public class LocationDao extends DaoBase {
 
         String sql = "INSERT INTO locations (`location_id`, `street_address`, `postal_code`, `city`, `state_province`, `country_id`) "
                 + "VALUES (?,?,?,?,?,?)";
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setInt(1, locationID);
             pstmt.setString(2, streetAddress);
@@ -61,7 +61,7 @@ public class LocationDao extends DaoBase {
 
         String sql = "SELECT * FROM locations left join countries c on locations.country_id = c.country_id" +
                 " WHERE location_id = ?";
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setInt(1, locationId);
 
@@ -93,7 +93,7 @@ public class LocationDao extends DaoBase {
         String sql = "UPDATE locations SET street_address = ?, postal_code = ?, city = ?, state_province = ?, country_id = ? "
                 + "WHERE location_id = ?";
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
                 pstmt.setString(1, streetAddress);
                 pstmt.setString(2, postalCode);
@@ -108,7 +108,7 @@ public class LocationDao extends DaoBase {
     }
 
     public void borrar(int locationID)  {
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement("DELETE FROM locations WHERE location_id = ?");) {
             pstmt.setInt(1, locationID);
             pstmt.executeUpdate();

@@ -14,7 +14,7 @@ public class JobDao extends DaoBase {
 
         ArrayList<Job> lista = new ArrayList<>();
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM jobs")) {
 
@@ -37,7 +37,7 @@ public class JobDao extends DaoBase {
         String sql = "INSERT INTO jobs (job_id,job_title,min_salary,max_salary) "
                 + "VALUES (?,?,?,?)";
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, jobId);
             pstmt.setString(2, jobTitle);
@@ -52,7 +52,7 @@ public class JobDao extends DaoBase {
         Job job = null;
 
         String sql = "SELECT * FROM jobs WHERE job_id = ?";
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, jobId);
 
@@ -77,7 +77,7 @@ public class JobDao extends DaoBase {
         String sql = "UPDATE jobs SET job_title = ?, min_salary = ?, max_salary = ? "
                 + "WHERE job_id = ?";
 
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, jobTitle);
             pstmt.setInt(2, minSalary);
@@ -90,7 +90,7 @@ public class JobDao extends DaoBase {
     public void borrarTrabajo(String jobId) throws SQLException {
 
         String sql = "DELETE FROM jobs WHERE job_id = ?";
-        try (Connection conn = this.getConection();
+        try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, jobId);
             pstmt.executeUpdate();

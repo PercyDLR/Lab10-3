@@ -1,7 +1,6 @@
 <%@ page import="com.example.lab103.Beans.Employee" %>
 <% String currentPage = request.getParameter("currentPage"); %>
-<jsp:useBean id="employeeSession" type="com.example.lab103.Beans.Employee" scope="session"
-             class="com.example.lab103.Beans.Employee"/>
+<jsp:useBean id="employeeSession" type="com.example.lab103.Beans.Employee" scope="session" class="com.example.lab103.Beans.Employee"/>
 
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <a class="navbar-brand" href="#">Gestión HR</a>
@@ -11,7 +10,8 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav">
-            <% if (employeeSession.getEmployeeId() > 0) { %>
+            <% if (employeeSession.getEmployeeId() > 0) {
+                int top = (Integer) session.getAttribute("top");%>
             <li class="nav-item">
                 <a class="nav-link <%=currentPage.equals("cou") ? "active" : ""%>"
                    href="<%=request.getContextPath()%>/CountryServlet">
@@ -50,8 +50,8 @@
             </li>
             <li class="nav-item">
                 <span class="nav-link text-dark">
-                    Bienvenido <%=employeeSession.getFirstName()%> <%=employeeSession.getLastName()%> (<a
-                        href="<%=request.getContextPath()%>/LoginServlet?action=logout">Cerrar Sesión</a>)
+                    Bienvenido <%=employeeSession.getFirstName()%> <%=employeeSession.getLastName()%> - Top <%=top%>
+                    (<a href="<%=request.getContextPath()%>/LoginServlet?action=logout">Cerrar Sesión</a>)
                 </span>
             </li>
             <% } else { %>

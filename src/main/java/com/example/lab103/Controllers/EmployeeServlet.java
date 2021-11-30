@@ -3,9 +3,11 @@ package com.example.lab103.Controllers;
 import com.example.lab103.Beans.Department;
 import com.example.lab103.Beans.Employee;
 import com.example.lab103.Beans.Job;
+import com.example.lab103.Beans.JobHistory;
 import com.example.lab103.Daos.DepartmentDao;
 import com.example.lab103.Daos.EmployeeDao;
 import com.example.lab103.Daos.JobDao;
+import com.example.lab103.Daos.JobHistoryDao;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @WebServlet(name = "EmployeeServlet", urlPatterns = {"/EmployeeServlet"})
 public class EmployeeServlet extends HttpServlet {
@@ -143,6 +146,19 @@ public class EmployeeServlet extends HttpServlet {
             e.setCommissionPct(request.getParameter("commission").equals("") ? null : new BigDecimal(request.getParameter("commission")));
 
             String jobId = request.getParameter("job_id");
+
+            // Registra en el log
+            if(!jobId.equals(em.getJob().getJobId())){
+                JobHistoryDao jhd = new JobHistoryDao();
+
+                JobHistory jh = new JobHistory();
+                jh.setEmployee(em);
+
+                for(JobHistory hist : jhd.listarHistorial()){
+
+                }
+            }
+
             Job job = new Job(jobId);
             e.setJob(job);
 
