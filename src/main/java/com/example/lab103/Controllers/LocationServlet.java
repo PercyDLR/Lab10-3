@@ -61,12 +61,11 @@ public class LocationServlet extends HttpServlet {
                         break;
 
                     case "crear":
-                        boolean locationId_isNumero = false;
-                        try {
-                            locationId = Integer.parseInt(request.getParameter("id"));
-                            locationId_isNumero = true;
-                        } catch (NumberFormatException e) {
-                            e.printStackTrace();
+                        String locationIdS = request.getParameter("id");
+                        if(locationIdS.matches("[0-9]*")) {
+                            locationId = Integer.parseInt(locationIdS);
+                        } else{
+                            locationId = Integer.parseInt(null);
                         }
 
                         String streetAddress = request.getParameter("streetAddress");
@@ -107,11 +106,10 @@ public class LocationServlet extends HttpServlet {
                         break;
 
                     case "editar":
-                        locationId_isNumero = false;
-                        try {
-                            locationId = Integer.parseInt(request.getParameter("id"));
-                            locationId_isNumero = true;
-                        } catch (NumberFormatException e) {
+                        if(locationIdS.matches("[0-9]*")) {
+                            locationId = Integer.parseInt(locationIdS);
+                        } else{
+                            locationId = Integer.parseInt(null);
                         }
                         location = locationDao.obtener(locationId);
                         if (location == null) {
