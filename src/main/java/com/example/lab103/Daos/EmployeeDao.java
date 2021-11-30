@@ -133,8 +133,10 @@ public class EmployeeDao extends DaoBase {
 
     public void borrarEmpleado(int employeeId) throws SQLException {
         String sql = "DELETE FROM employees WHERE employee_id = ?";
+
         try (Connection conn = this.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
+
             pstmt.setInt(1, employeeId);
             pstmt.executeUpdate();
         }

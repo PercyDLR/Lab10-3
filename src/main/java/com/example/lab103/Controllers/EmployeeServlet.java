@@ -48,7 +48,7 @@ public class EmployeeServlet extends HttpServlet {
             } else if(top == 3 && (action.equals("borrar") || action.equals("agregar"))){
                 action = "lista";
 
-            } else if(top == 4 && (!action.equals("lista"))){
+            } else if(top == 4 && !(action.equals("lista") || action.equals("est"))){
                 action = "lista";
             }
 

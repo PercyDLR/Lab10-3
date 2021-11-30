@@ -77,7 +77,7 @@ public class JobServlet extends HttpServlet {
                             view.forward(request, response);
                         }
                         break;
-                    case "guardar":
+                    case "crear":
                         jobId = request.getParameter("id");
                         String jobTitle = request.getParameter("jobTitle");
                         int minSalary = Integer.parseInt(request.getParameter("minSalary"));

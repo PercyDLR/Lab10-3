@@ -146,8 +146,10 @@ public class DepartmentDao extends DaoBase {
             String sql = "DELETE FROM departments WHERE department_id = ?";
             try (Connection conn = this.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
                 pstmt.setInt(1, departmentId);
                 pstmt.executeUpdate();
+
             } catch (SQLException ex) {
                 Logger.getLogger(DepartmentDao.class.getName()).log(Level.SEVERE, null, ex);
             }

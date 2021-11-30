@@ -3,6 +3,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <jsp:useBean id="listaEmpleados" type="java.util.ArrayList<com.example.lab103.Beans.Employee>" scope="request"/>
 <jsp:useBean id="textoBusqueda" scope="request" type="java.lang.String" class="java.lang.String"/>
+<jsp:useBean type="java.lang.Integer" scope="session" id="top"/>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,6 +16,13 @@
             <jsp:include page="../includes/navbar.jsp">
                 <jsp:param name="currentPage" value="emp"/>
             </jsp:include>
+
+            <%
+                String crear = top < 3 ? "" : "hidden";
+                String editar = top == 1 || top == 3 ? "" : "hidden";
+                String borrar = top < 3 ? "" : "hidden";
+            %>
+
             <div class="row mb-5 mt-4">
                 <div class="col-md-7">
                     <h1>Lista de empleados</h1>
@@ -23,7 +32,7 @@
                     if (employeeSession.getJob().getJobId().equals("AD_PRES")) {
                 %>
                 <div class="col-md-5 col-lg-4 ms-auto my-auto text-md-end">
-                    <a href="<%= request.getContextPath()%>/EmployeeServlet?action=agregar" class="btn btn-primary">
+                    <a href="<%= request.getContextPath()%>/EmployeeServlet?action=agregar" class="btn btn-primary" <%=crear%>>
                         Agregar nuevo empleado</a>
                 </div>
                 <% } %>
@@ -80,14 +89,14 @@
                         </td>
                         <td>
                             <a href="<%=request.getContextPath()%>/EmployeeServlet?action=editar&id=<%= e.getEmployeeId()%>"
-                               type="button" class="btn btn-primary">
+                               type="button" class="btn btn-primary" <%=editar%>>
                                 <i class="bi bi-pencil-square"></i>
                             </a>
                         </td>
                         <td>
                             <a onclick="return confirm('¿Estas seguro de borrar?');"
-                               href="<%=request.getContextPath()%>/EmployeeServlet?action=editar&id=<%= e.getEmployeeId()%>"
-                               type="button" class="btn btn-danger">
+                               href="<%=request.getContextPath()%>/EmployeeServlet?action=borrar&id=<%= e.getEmployeeId()%>"
+                               type="button" class="btn btn-danger" <%=borrar%>>
                                 <i class="bi bi-trash"></i>
                             </a>
                         </td>
