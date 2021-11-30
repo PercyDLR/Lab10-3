@@ -35,83 +35,103 @@ public class LocationServlet extends HttpServlet {
             LocationDao locationDao = new LocationDao();
             CountryDao countryDao = new CountryDao();
             RequestDispatcher view;
-            Location location;
-            int locationId = 0;
 
-            switch (action) {
-                case "formCrear":
-                    request.setAttribute("listaPaises", countryDao.listar());
-                    view = request.getRequestDispatcher("location/newLocation.jsp");
-                    view.forward(request, response);
-                    break;
-                case "crear":
-                    boolean locationId_isNumero = false;
-                    try {
-                        locationId = Integer.parseInt(request.getParameter("id"));
-                        locationId_isNumero = true;
-                    }
-                    catch(NumberFormatException e){
-                    }
+            int top = (Integer) session.getAttribute("top");
 
-                    String streetAddress = request.getParameter("streetAddress");
+            if (top == 2 && (action.equals("editar"))) {
+                action = "lista";
 
-                    String postalCode = request.getParameter("postalCode");
-                    if(postalCode.equals("")){
-                        postalCode = null;
-                    }
+            } else if (top == 3 && (action.equals("borrar") || action.equals("formCrear"))) {
+                action = "lista";
 
-                    String city = request.getParameter("city");
+            }
 
-                    String stateProvince = request.getParameter("stateProvince");
-                    if(stateProvince.equals("")){
-                        stateProvince = null;
-                    }
+            if (top == 4) {
+                response.sendRedirect(request.getContextPath() + "/CountryServlet");
+            } else {
 
-                    String countryId = request.getParameter("countryId");
+                Location location;
+                int locationId = 0;
 
-                    location = locationDao.obtener(locationId);
-
-                    if (location == null) {
-                        locationDao.crear(locationId, streetAddress, postalCode, city, stateProvince, countryId);
-                    } else {
-                        locationDao.actualizar(locationId, streetAddress, postalCode, city, stateProvince, countryId);
-                    }
-                    response.sendRedirect(request.getContextPath() + "/LocationServlet");
-                    break;
-                case "lista":
-                    ArrayList<Location> lista = locationDao.listar();
-
-                    request.setAttribute("lista", lista);
-
-                    view = request.getRequestDispatcher("location/listaLocation.jsp");
-                    view.forward(request, response);
-                    break;
-
-                case "editar":
-                    locationId_isNumero = false;
-                    try {
-                        locationId = Integer.parseInt(request.getParameter("id"));
-                        locationId_isNumero = true;
-                    }
-                    catch(NumberFormatException e){
-                    }
-                    location = locationDao.obtener(locationId);
-                    if (location == null) {
-                        response.sendRedirect(request.getContextPath() + "/LocationServlet");
-                    } else {
+                switch (action) {
+                    case "formCrear":
                         request.setAttribute("listaPaises", countryDao.listar());
-                        request.setAttribute("location", location);
-                        view = request.getRequestDispatcher("location/updateLocation.jsp");
+                        view = request.getRequestDispatcher("location/newLocation.jsp");
                         view.forward(request, response);
-                    }
-                    break;
-                case "borrar":
-                    locationId = Integer.parseInt(request.getParameter("id"));
-                    if (locationDao.obtener(locationId) != null) {
-                        locationDao.borrar(locationId);
-                    }
-                    response.sendRedirect(request.getContextPath() + "/LocationServlet");
-                    break;
+                        break;
+
+                    case "crear":
+                        boolean locationId_isNumero = false;
+                        try {
+                            locationId = Integer.parseInt(request.getParameter("id"));
+                            locationId_isNumero = true;
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+
+                        String streetAddress = request.getParameter("streetAddress");
+
+                        String postalCode = request.getParameter("postalCode");
+                        if (postalCode.equals("")) {
+                            postalCode = null;
+                        }
+
+                        String city = request.getParameter("city");
+
+                        String stateProvince = request.getParameter("stateProvince");
+                        if (stateProvince.equals("")) {
+                            stateProvince = null;
+                        }
+
+                        String countryId = request.getParameter("countryId");
+
+                        location = locationDao.obtener(locationId);
+
+                        if (location == null && top < 3) {
+                            locationDao.crear(locationId, streetAddress, postalCode, city, stateProvince, countryId);
+
+                        } else if (location != null && (top == 1 || top == 3)) {
+                            locationDao.actualizar(locationId, streetAddress, postalCode, city, stateProvince, countryId);
+                        }
+
+                        response.sendRedirect(request.getContextPath() + "/LocationServlet");
+                        break;
+
+                    case "lista":
+                        ArrayList<Location> lista = locationDao.listar();
+
+                        request.setAttribute("lista", lista);
+
+                        view = request.getRequestDispatcher("location/listaLocation.jsp");
+                        view.forward(request, response);
+                        break;
+
+                    case "editar":
+                        locationId_isNumero = false;
+                        try {
+                            locationId = Integer.parseInt(request.getParameter("id"));
+                            locationId_isNumero = true;
+                        } catch (NumberFormatException e) {
+                        }
+                        location = locationDao.obtener(locationId);
+                        if (location == null) {
+                            response.sendRedirect(request.getContextPath() + "/LocationServlet");
+                        } else {
+                            request.setAttribute("listaPaises", countryDao.listar());
+                            request.setAttribute("location", location);
+                            view = request.getRequestDispatcher("location/updateLocation.jsp");
+                            view.forward(request, response);
+                        }
+                        break;
+
+                    case "borrar":
+                        locationId = Integer.parseInt(request.getParameter("id"));
+                        if (locationDao.obtener(locationId) != null) {
+                            locationDao.borrar(locationId);
+                        }
+                        response.sendRedirect(request.getContextPath() + "/LocationServlet");
+                        break;
+                }
             }
         }
     }

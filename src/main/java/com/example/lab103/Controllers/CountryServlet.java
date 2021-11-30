@@ -28,10 +28,23 @@ public class CountryServlet extends HttpServlet {
         if (em == null) {
             response.sendRedirect(request.getContextPath());
         } else {
+
+            RequestDispatcher view;
             String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
 
+            int top = (Integer) session.getAttribute("top");
+
+            if(top == 2 && (action.equals("editar"))){
+                action = "lista";
+
+            } else if(top == 3 && (action.equals("borrar") || action.equals("formCrear"))){
+                action = "lista";
+
+            } else if(top == 4 && (!action.equals("lista"))){
+                action = "lista";
+            }
+
             CountryDao countryDao = new CountryDao();
-            RequestDispatcher view;
             Country country;
             String countryId;
 
@@ -41,6 +54,7 @@ public class CountryServlet extends HttpServlet {
                     view = request.getRequestDispatcher("country/newCountry.jsp");
                     view.forward(request, response);
                     break;
+
                 case "crear":
                     countryId = request.getParameter("id");
 
@@ -56,13 +70,16 @@ public class CountryServlet extends HttpServlet {
 
                     country = countryDao.obtener(countryId);
 
-                    if (country == null) {
+                    if (country == null && top < 3) {
                         countryDao.crear(countryId, countryName, regionId);
-                    } else {
+
+                    } else if (country != null && (top ==1 || top == 3)) {
                         countryDao.actualizar(countryId, countryName, regionId);
                     }
+
                     response.sendRedirect(request.getContextPath() + "/CountryServlet");
                     break;
+
                 case "lista":
                     ArrayList<Country> lista = countryDao.listar();
 
@@ -84,6 +101,7 @@ public class CountryServlet extends HttpServlet {
                         view.forward(request, response);
                     }
                     break;
+
                 case "borrar":
                     countryId = request.getParameter("id");
                     if (countryDao.obtener(countryId) != null) {

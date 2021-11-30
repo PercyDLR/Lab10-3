@@ -40,6 +40,18 @@ public class EmployeeServlet extends HttpServlet {
             String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
 
             RequestDispatcher view;
+            int top = (Integer) session.getAttribute("top");
+
+            if(top == 2 && (action.equals("editar"))){
+                action = "lista";
+
+            } else if(top == 3 && (action.equals("borrar") || action.equals("agregar"))){
+                action = "lista";
+
+            } else if(top == 4 && (!action.equals("lista"))){
+                action = "lista";
+            }
+
             EmployeeDao employeeDao = new EmployeeDao();
             JobDao jobDao = new JobDao();
             DepartmentDao departmentDao = new DepartmentDao();
@@ -113,14 +125,15 @@ public class EmployeeServlet extends HttpServlet {
                     } else {
                         response.sendRedirect("EmployeeServlet");
                     }
-
                     break;
+
                 case "est":
                     request.setAttribute("listaSalarioPorDepa", departmentDao.listaSalarioPorDepartamento());
                     request.setAttribute("listaEmpleadPorRegion", employeeDao.listaEmpleadosPorRegion());
                     view = request.getRequestDispatcher("employees/estadisticas.jsp");
                     view.forward(request, response);
                     break;
+
                 default:
                     response.sendRedirect("EmployeeServlet");
             }
@@ -135,9 +148,12 @@ public class EmployeeServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Employee em = (Employee) session.getAttribute("employeeSession");
 
+
         if (em == null) {
             response.sendRedirect(request.getContextPath());
         } else {
+
+            int top = (Integer) session.getAttribute("top");
 
             Employee e = new Employee();
             e.setFirstName(request.getParameter("first_name"));
@@ -165,7 +181,7 @@ public class EmployeeServlet extends HttpServlet {
 
             EmployeeDao employeeDao = new EmployeeDao();
 
-            if (request.getParameter("employee_id") == null) {
+            if (request.getParameter("employee_id") == null && top < 3) {
 
                 try {
                     employeeDao.guardarEmpleado(e);
@@ -175,7 +191,7 @@ public class EmployeeServlet extends HttpServlet {
                     session.setAttribute("err", "Error al crear el empleado");
                     response.sendRedirect(request.getContextPath() + "/EmployeeServlet?action=agregar");
                 }
-            } else {
+            } else if (request.getParameter("employee_id") != null && (top == 1 || top == 3)) {
 
                 Employee employee = employeeDao.obtenerEmpleado(Integer.parseInt(request.getParameter("employee_id")));
                 e.setEmployeeId(Integer.parseInt(request.getParameter("employee_id")));
@@ -232,13 +248,15 @@ public class EmployeeServlet extends HttpServlet {
                         jhd.agregarRegistro(jh);
 
                     }
-
                     session.setAttribute("msg", "Empleado actualizado exitosamente");
                     response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
                 } catch (SQLException ex) {
                     session.setAttribute("err", "Error al actualizar el empleado");
                     response.sendRedirect(request.getContextPath() + "/EmployeeServlet?action=editar");
                 }
+            } else {
+                session.setAttribute("err", "Usted NO Tiene Permisos para Realizar esta Operación");
+                response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
             }
         }
     }

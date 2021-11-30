@@ -71,7 +71,6 @@ public class LoginServlet extends HttpServlet {
                 } else if (employee.getSalary().compareTo(new BigDecimal(5000)) > 0) {
                     session.setAttribute("top", 3);
                     response.sendRedirect(request.getContextPath() + "/DepartmentServlet");
-
                 } else {
                     session.setAttribute("top", 4);
                     response.sendRedirect(request.getContextPath() + "/CountryServlet");

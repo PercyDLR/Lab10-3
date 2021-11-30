@@ -41,6 +41,19 @@ public class DepartmentServlet extends HttpServlet {
             LocationDao locationDao = new LocationDao();
             EmployeeDao employeeDao = new EmployeeDao();
             RequestDispatcher view;
+
+            int top = (Integer) session.getAttribute("top");
+
+            if(top == 2 && (action.equals("editar"))){
+                action = "lista";
+
+            } else if(top == 3 && (action.equals("borrar") || action.equals("formCrear"))){
+                action = "lista";
+
+            } else if(top == 4 && (!action.equals("lista"))){
+                action = "lista";
+            }
+
             Department department;
             int departmentId = 0;
 
@@ -58,6 +71,7 @@ public class DepartmentServlet extends HttpServlet {
                         depaId_isNumero = true;
                     }
                     catch(NumberFormatException e){
+                        e.printStackTrace();
                     }
 
                     String departmentName = request.getParameter("departmentName");
@@ -66,13 +80,15 @@ public class DepartmentServlet extends HttpServlet {
 
                     department = departmentDao.obtener(departmentId);
 
-                    if (department == null) {
+                    if (department == null && top < 3) {
                         departmentDao.crear(departmentId, departmentName, managerId, locationId);
-                    } else {
+                    } else if (department != null && (top ==1 || top == 3)) {
                         departmentDao.actualizar(departmentId, departmentName, managerId, locationId);
                     }
+
                     response.sendRedirect(request.getContextPath() + "/DepartmentServlet");
                     break;
+
                 case "lista":
                     ArrayList<Department> lista = departmentDao.listaDepartamentos();
 
@@ -95,6 +111,7 @@ public class DepartmentServlet extends HttpServlet {
                         view.forward(request, response);
                     }
                     break;
+
                 case "borrar":
                     departmentId = Integer.parseInt(request.getParameter("id"));
                     if (departmentDao.obtener(departmentId) != null) {
