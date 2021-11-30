@@ -21,27 +21,27 @@
                         <input type="hidden" class="form-control" name="id" value="<%=location.getLocationId()%>">
                         <div class="mb-3">
                             <label class="form-label" for="streetAddress">Street Address</label>
-                            <input type="text" class="form-control" name="streetAddress" id="streetAddress"
+                            <input type="text" class="form-control" name="streetAddress" id="streetAddress" required="required"
                                    value="<%=location.getStreetAddress() %>"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="postalCode">Postal Code</label>
-                            <input type="text" class="form-control" name="postalCode" id="postalCode"
+                            <input type="text" class="form-control" name="postalCode" id="postalCode" required="required"
                                    value="<%=location.getPostalCode() %>"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="city">City</label>
-                            <input type="text" class="form-control" name="city" id="city"
+                            <input type="text" class="form-control" name="city" id="city" required="required"
                                    value="<%=location.getCity() %>"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="stateProvince">State Province</label>
-                            <input type="text" class="form-control" name="stateProvince" id="stateProvince"
+                            <input type="text" class="form-control" name="stateProvince" id="stateProvince" required="required"
                                    value="<%=location.getStateProvince() %>"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="countryId">Country</label>
-                            <select name="countryId" id="countryId" class="form-control">
+                            <select name="countryId" id="countryId" class="form-control" required>
                                 <% for (Country country : listaPaises) {%>
                                 <option value="<%=country.getCountryId()%>" <%=country.getCountryId().equals(location.getCountry().getCountryId()) ? "SELECTED" : ""%>>
                                     <%=country.getCountryName()%>
@@ -50,7 +50,20 @@
                             </select>
                         </div>
                         <a href="<%= request.getContextPath()%>/LocationServlet" class="btn btn-danger">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <%
+                            if(null != request.getParameter("buttonPressed")){
+                                if(null == request.getParameter("id") &&
+                                        null == request.getParameter("streetAddress") &&
+                                        null == request.getParameter("postalCode") &&
+                                        null == request.getParameter("city") &&
+                                        null == request.getParameter("stateProvince")
+                                )
+                                {
+                                    request.setAttribute("errorMessage", "Error al crear o editar el location");
+                                }
+                            }
+                        %>
+                        <button type="submit" name="buttonPressed" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                 <div class="col"></div>

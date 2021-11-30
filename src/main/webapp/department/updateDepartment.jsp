@@ -24,12 +24,12 @@
                         <input type="hidden" class="form-control" name="id" value="<%=department.getDepartmentId()%>">
                         <div class="mb-3">
                             <label class="form-label" for="departmentName">Department name</label>
-                            <input type="text" class="form-control" name="departmentName" id="departmentName"
+                            <input type="text" class="form-control" name="departmentName" id="departmentName" required="required"
                                    value="<%=department.getDepartmentName()%>" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="managerId">Manager</label>
-                            <select name="managerId" id="managerId" class="form-control">
+                            <select name="managerId" id="managerId" class="form-control" required>
                                 <option value="0" <%= department.getManager() == null ? "Selected" : "" %>>
                                     -- Sin Jefe --
                                 </option>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="locationId">Location</label>
-                            <select name="locationId" id="locationId" class="form-control">
+                            <select name="locationId" id="locationId" class="form-control" required>
                                 <option value="0" <%= department.getLocation() == null ? "Selected" : "" %>>
                                     -- Sin Ubicación --
                                 </option>
@@ -54,7 +54,16 @@
                             </select>
                         </div>
                         <a href="<%= request.getContextPath()%>/DepartmentServlet" class="btn btn-danger">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <%
+                            if(null != request.getParameter("buttonPressed")){
+                                if(null == request.getParameter("id") &&
+                                        null == request.getParameter("departmentName"))
+                                {
+                                    request.setAttribute("errorMessage", "Error al crear o editar un departamento");
+                                }
+                            }
+                        %>
+                        <button type="submit" name="buttonPressed" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                 <div class="col"></div>

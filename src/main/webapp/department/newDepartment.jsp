@@ -21,15 +21,15 @@
                     <form method="POST" action="<%=request.getContextPath()%>/DepartmentServlet?action=crear">
                         <div class="mb-3">
                             <label class="form-label" for="id">Department ID</label>
-                            <input type="text" class="form-control" name="id" id="id" />
+                            <input type="text" class="form-control" name="id" id="id" required="required" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="departmentName">Department name</label>
-                            <input type="text" class="form-control" name="departmentName" id="departmentName" />
+                            <input type="text" class="form-control" name="departmentName" id="departmentName" required="required"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="managerId">Manager</label>
-                            <select name="managerId" id="managerId" class="form-control">
+                            <select name="managerId" id="managerId" class="form-control" required>
                                 <option value="0">-- Sin Jefe --</option>
                                 <% for (Employee e : listaEmpleados) {%>
                                 <option value="<%=e.getEmployeeId()%>"><%=e.getFirstName() + " " + e.getLastName()%>
@@ -39,7 +39,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="locationId">Location</label>
-                            <select name="locationId" id="locationId" class="form-control">
+                            <select name="locationId" id="locationId" class="form-control" required>
                                 <option value="0">-- Sin Ubicación --</option>
                                 <% for (Location l : listaLocations) {%>
                                 <option value="<%=l.getLocationId()%>"><%=l.getCity()%>
@@ -48,7 +48,16 @@
                             </select>
                         </div>
                         <a href="<%= request.getContextPath()%>/DepartmentServlet" class="btn btn-danger">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <%
+                        if(null != request.getParameter("buttonPressed")){
+                            if(null == request.getParameter("id") &&
+                                    null == request.getParameter("departmentName"))
+                            {
+                                 request.setAttribute("errorMessage", "Error al crear o editar un departamento");
+                            }
+                        }
+                        %>
+                        <button type="submit" name="buttonPressed" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                 <div class="col"></div>
