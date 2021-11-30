@@ -42,7 +42,7 @@ public class DepartmentServlet extends HttpServlet {
             EmployeeDao employeeDao = new EmployeeDao();
             RequestDispatcher view;
             Department department;
-            int departmentId;
+            int departmentId = 0;
 
             switch (action) {
                 case "formCrear":
@@ -52,7 +52,14 @@ public class DepartmentServlet extends HttpServlet {
                     view.forward(request, response);
                     break;
                 case "crear":
-                    departmentId = Integer.parseInt(request.getParameter("id"));
+                    boolean depaId_isNumero = false;
+                    try{
+                        departmentId = Integer.parseInt(request.getParameter("id"));
+                        depaId_isNumero = true;
+                    }
+                    catch(NumberFormatException e){
+                    }
+
                     String departmentName = request.getParameter("departmentName");
                     int managerId = Integer.parseInt(request.getParameter("managerId"));
                     int locationId = Integer.parseInt(request.getParameter("locationId"));
